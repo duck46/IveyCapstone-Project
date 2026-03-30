@@ -11,7 +11,12 @@ client = OpenAI(
     api_key=os.environ.get("OPENROUTER_API_KEY"),
 )
 
-MODEL = "meta-llama/llama-3.3-70b-instruct:free"
+MODELS = [
+    "openai/gpt-oss-20b:free",
+    "google/gemma-3-27b-it:free",
+    "meta-llama/llama-3.3-70b-instruct:free",
+    "nvidia/nemotron-3-super-120b-a12b:free",
+]
 
 _APPROVED_RULES_BRIEF = "\n".join(f"- {r['rule']}" for r in APPROVED_RULES)
 _LEGISLATION_BRIEF = "\n".join(f"- {l['name']}" for l in LEGISLATION)
@@ -75,11 +80,23 @@ def chat(request: ChatRequest) -> ChatResponse:
     ]
     messages.append({"role": "user", "content": request.message})
 
-    response = client.chat.completions.create(
-        model=MODEL,
-        max_tokens=1024,
-        messages=[{"role": "system", "content": CHATBOT_SYSTEM_PROMPT}] + messages,
-    )
+    last_error = None
+    response = None
+    for model in MODELS:
+        try:
+            response = client.chat.completions.create(
+                model=model,
+                max_tokens=1024,
+                messages=[{"role": "system", "content": CHATBOT_SYSTEM_PROMPT}] + messages,
+            )
+            break
+        except Exception as e:
+            if "429" in str(e) or "rate" in str(e).lower():
+                last_error = e
+                continue
+            raise
+    if response is None:
+        raise last_error
 
     assistant_text = response.choices[0].message.content
 

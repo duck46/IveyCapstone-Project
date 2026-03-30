@@ -13,7 +13,12 @@ client = OpenAI(
     api_key=os.environ.get("OPENROUTER_API_KEY"),
 )
 
-MODEL = "meta-llama/llama-3.3-70b-instruct:free"
+MODELS = [
+    "openai/gpt-oss-20b:free",
+    "google/gemma-3-27b-it:free",
+    "meta-llama/llama-3.3-70b-instruct:free",
+    "nvidia/nemotron-3-super-120b-a12b:free",
+]
 
 _APPROVED_RULES_TEXT = "\n".join(
     f"- {r['rule']} (Category: {r['category']})" for r in APPROVED_RULES
@@ -138,14 +143,26 @@ def evaluate_rule(request: EvaluateRequest) -> EvaluateResponse:
 
 Apply the full 4-level assessment framework and return your evaluation as JSON."""
 
-    response = client.chat.completions.create(
-        model=MODEL,
-        max_tokens=2500,
-        messages=[
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": user_prompt},
-        ],
-    )
+    last_error = None
+    response = None
+    for model in MODELS:
+        try:
+            response = client.chat.completions.create(
+                model=model,
+                max_tokens=2500,
+                messages=[
+                    {"role": "system", "content": SYSTEM_PROMPT},
+                    {"role": "user", "content": user_prompt},
+                ],
+            )
+            break
+        except Exception as e:
+            if "429" in str(e) or "rate" in str(e).lower():
+                last_error = e
+                continue
+            raise
+    if response is None:
+        raise last_error
 
     raw = response.choices[0].message.content.strip()
 
