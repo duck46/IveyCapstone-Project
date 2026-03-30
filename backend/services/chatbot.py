@@ -11,7 +11,7 @@ client = OpenAI(
     api_key=os.environ.get("OPENROUTER_API_KEY"),
 )
 
-MODEL = "nvidia/nemotron-3-super-120b-a12b:free"
+MODEL = "meta-llama/llama-3.3-70b-instruct:free"
 
 _APPROVED_RULES_BRIEF = "\n".join(f"- {r['rule']}" for r in APPROVED_RULES)
 _LEGISLATION_BRIEF = "\n".join(f"- {l['name']}" for l in LEGISLATION)
