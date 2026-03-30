@@ -1,12 +1,17 @@
 import os
-from anthropic import Anthropic
+from openai import OpenAI
 
 from data.approved_rules import APPROVED_RULES
 from data.legislation import LEGISLATION
 from data.principles import PRINCIPLES, REJECTION_REASONS
 from models.schemas import ChatMessage, ChatRequest, ChatResponse
 
-client = Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
+client = OpenAI(
+    base_url="https://openrouter.ai/api/v1",
+    api_key=os.environ.get("OPENROUTER_API_KEY"),
+)
+
+MODEL = "nvidia/nemotron-super-49b-v1:free"
 
 _APPROVED_RULES_BRIEF = "\n".join(f"- {r['rule']}" for r in APPROVED_RULES)
 _LEGISLATION_BRIEF = "\n".join(f"- {l['name']}" for l in LEGISLATION)
@@ -70,14 +75,13 @@ def chat(request: ChatRequest) -> ChatResponse:
     ]
     messages.append({"role": "user", "content": request.message})
 
-    response = client.messages.create(
-        model="claude-sonnet-4-6",
+    response = client.chat.completions.create(
+        model=MODEL,
         max_tokens=1024,
-        system=CHATBOT_SYSTEM_PROMPT,
-        messages=messages,
+        messages=[{"role": "system", "content": CHATBOT_SYSTEM_PROMPT}] + messages,
     )
 
-    assistant_text = response.content[0].text
+    assistant_text = response.choices[0].message.content
 
     updated_history = list(request.history) + [
         ChatMessage(role="user", content=request.message),

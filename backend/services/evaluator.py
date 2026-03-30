@@ -1,14 +1,19 @@
 import json
 import os
 import re
-from anthropic import Anthropic
+from openai import OpenAI
 
 from data.approved_rules import APPROVED_RULES
 from data.legislation import LEGISLATION
 from data.principles import PRINCIPLES, REJECTION_REASONS
 from models.schemas import EvaluateRequest, EvaluateResponse, LevelResult
 
-client = Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
+client = OpenAI(
+    base_url="https://openrouter.ai/api/v1",
+    api_key=os.environ.get("OPENROUTER_API_KEY"),
+)
+
+MODEL = "nvidia/nemotron-super-49b-v1:free"
 
 _APPROVED_RULES_TEXT = "\n".join(
     f"- {r['rule']} (Category: {r['category']})" for r in APPROVED_RULES
@@ -133,14 +138,16 @@ def evaluate_rule(request: EvaluateRequest) -> EvaluateResponse:
 
 Apply the full 4-level assessment framework and return your evaluation as JSON."""
 
-    message = client.messages.create(
-        model="claude-sonnet-4-6",
+    response = client.chat.completions.create(
+        model=MODEL,
         max_tokens=2500,
-        system=SYSTEM_PROMPT,
-        messages=[{"role": "user", "content": user_prompt}],
+        messages=[
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": user_prompt},
+        ],
     )
 
-    raw = message.content[0].text.strip()
+    raw = response.choices[0].message.content.strip()
 
     # Strip markdown code fences if present
     raw = re.sub(r"^```(?:json)?\s*", "", raw)

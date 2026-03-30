@@ -23,7 +23,7 @@ Also includes an embedded **Regulatory Knowledge Chatbot** powered by Claude.
 
 ## Stack
 
-- **Backend:** Python 3.11 + FastAPI + Anthropic SDK (`claude-sonnet-4-6`)
+- **Backend:** Python 3.11 + FastAPI + OpenRouter (`nvidia/nemotron-super-49b-v1:free`)
 - **Frontend:** React 18 + Vite + TailwindCSS
 
 ---
@@ -36,7 +36,7 @@ Also includes an embedded **Regulatory Knowledge Chatbot** powered by Claude.
 git clone <repo-url>
 cd IveyCapstone-Project
 cp .env.example .env
-# Edit .env and add your ANTHROPIC_API_KEY
+# Edit .env and add your OPENROUTER_API_KEY
 ```
 
 ### 2. Backend
