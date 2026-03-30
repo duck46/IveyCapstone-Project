@@ -13,7 +13,7 @@ client = OpenAI(
     api_key=os.environ.get("OPENROUTER_API_KEY"),
 )
 
-MODEL = "nvidia/nemotron-super-49b-v1:free"
+MODEL = "nvidia/nemotron-3-super-120b-a12b:free"
 
 _APPROVED_RULES_TEXT = "\n".join(
     f"- {r['rule']} (Category: {r['category']})" for r in APPROVED_RULES
