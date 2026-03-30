@@ -197,6 +197,10 @@ IveyCapstone-Project/
 
 ---
 
-## Disclaimer
+## Disclaimer & License
 
-This is a prototype built for academic purposes as part of the Ivey Business School Capstone program. It is not an official FSRA tool and does not constitute legal or regulatory advice. All AI-generated assessments require human review before any action is taken.
+This project was built for academic purposes as part of the Ivey AI Prototyping for Business Innovation program (Cohort 2026). It is not an official FSRA tool and does not constitute legal or regulatory advice. All AI-generated assessments require human review before any action is taken.
+
+The regulatory framework, assessment criteria, approved rules references, and Ontario legislation references used in this project are derived from publicly available FSRA guidance and enterprise sources. This repository is shared for portfolio and educational purposes only and is **not intended for commercial use, redistribution, or reuse** without explicit permission from the author.
+
+&copy; 2025 Simon L. All rights reserved.
