@@ -2,7 +2,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 import os
-import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -10,11 +9,8 @@ from fastapi.responses import FileResponse
 
 from routers import evaluate, chat
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
 key = os.environ.get("OPENROUTER_API_KEY", "")
-logger.info("OPENROUTER_API_KEY loaded: length=%d, starts_with=%s", len(key), repr(key[:12]))
+print(f"[DEBUG] OPENROUTER_API_KEY: length={len(key)}, starts_with={repr(key[:12])}", flush=True)
 
 app = FastAPI(
     title="FSRA Underwriting Rule Assessment API",
