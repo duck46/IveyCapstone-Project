@@ -35,16 +35,16 @@ export function RejectionReasonTag({ reason }) {
   )
 }
 
-export function ScoreBar({ score }) {
+export function ScoreBar({ score, dark = false }) {
   const color =
-    score >= 80 ? 'bg-green-500' : score >= 60 ? 'bg-yellow-500' : score >= 40 ? 'bg-orange-500' : 'bg-red-500'
+    score >= 80 ? 'bg-green-400' : score >= 60 ? 'bg-yellow-400' : score >= 40 ? 'bg-orange-400' : 'bg-red-400'
   return (
     <div className="w-full">
-      <div className="flex justify-between text-sm mb-1">
-        <span className="text-gray-600">Compliance Score</span>
-        <span className="font-semibold">{Math.round(score)}/100</span>
+      <div className="flex justify-between text-sm mb-1.5">
+        <span className={dark ? 'text-green-200' : 'text-gray-600'}>Compliance Score</span>
+        <span className={`font-bold ${dark ? 'text-white' : 'text-gray-900'}`}>{Math.round(score)}/100</span>
       </div>
-      <div className="w-full bg-gray-200 rounded-full h-3">
+      <div className={`w-full rounded-full h-3 ${dark ? 'bg-green-900' : 'bg-gray-200'}`}>
         <div
           className={`${color} h-3 rounded-full transition-all duration-500`}
           style={{ width: `${score}%` }}

@@ -1,5 +1,14 @@
 import { StatusBadge, RecommendationBadge, RejectionReasonTag, ScoreBar } from './FlaggingBadges'
 
+const VALID_REJECTION_REASONS = [
+  'Not Risk-Relevant',
+  'Vague Language',
+  'Copycat Rule',
+  'Human Rights Violation',
+  'Contrary to Legislation',
+  'Discriminatory Impact',
+]
+
 const LEVEL_DESCRIPTIONS = {
   1: 'Checks compliance with Ontario legislation, Human Rights Code, Canadian Charter of Rights and Freedoms, and existing market rules.',
   2: 'Evaluates alignment with FSRA\'s 6 principles and fair consumer outcomes.',
@@ -50,15 +59,17 @@ function LevelCard({ result }) {
         </div>
       )}
 
-      {result.rejection_reasons_identified?.length > 0 && (
+      {result.rejection_reasons_identified?.filter(r => VALID_REJECTION_REASONS.includes(r)).length > 0 && (
         <div>
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">
             Issues Identified
           </p>
           <div>
-            {result.rejection_reasons_identified.map((reason, i) => (
-              <RejectionReasonTag key={i} reason={reason} />
-            ))}
+            {result.rejection_reasons_identified
+              .filter(r => VALID_REJECTION_REASONS.includes(r))
+              .map((reason, i) => (
+                <RejectionReasonTag key={i} reason={reason} />
+              ))}
           </div>
         </div>
       )}
@@ -92,7 +103,7 @@ export default function AssessmentPanel({ assessment }) {
         </div>
 
         <div className="mt-4">
-          <ScoreBar score={assessment.overall_score} />
+          <ScoreBar score={assessment.overall_score} dark />
         </div>
 
         <p className="mt-4 text-green-100 text-sm leading-relaxed">{assessment.summary}</p>

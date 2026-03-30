@@ -30,7 +30,7 @@ function RuleCard({ entry, onSelect, isActive }) {
             {entry.assessment.rule_text}
           </p>
           <p className="text-xs text-gray-500 mt-0.5">
-            {entry.assessment.insurer_name || 'Unknown insurer'} • {new Date(entry.submittedAt).toLocaleTimeString()}
+            {entry.assessment.insurer_name || 'Not specified'} • {new Date(entry.submittedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
           </p>
           <div className="mt-2 flex items-center gap-2 flex-wrap">
             <RecommendationBadge recommendation={effectiveRec} />
@@ -40,9 +40,9 @@ function RuleCard({ entry, onSelect, isActive }) {
           </div>
           <div className="mt-2">
             <div className="flex items-center gap-2">
-              <div className="flex-1 bg-gray-200 rounded-full h-1.5">
+              <div className="flex-1 bg-gray-200 rounded-full h-2">
                 <div
-                  className={`h-1.5 rounded-full ${
+                  className={`h-2 rounded-full ${
                     entry.assessment.overall_score >= 80 ? 'bg-green-500' :
                     entry.assessment.overall_score >= 60 ? 'bg-yellow-500' :
                     entry.assessment.overall_score >= 40 ? 'bg-orange-500' : 'bg-red-500'
