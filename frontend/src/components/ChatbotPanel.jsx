@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 
 const SUGGESTED_QUESTIONS = [
   'What is the Take All Comers Rule?',
@@ -22,6 +23,7 @@ function Message({ role, content }) {
       >
         {role === 'assistant' ? (
           <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
             components={{
               h1: ({ children }) => <h1 className="text-base font-bold mt-3 mb-1">{children}</h1>,
               h2: ({ children }) => <h2 className="text-sm font-bold mt-3 mb-1">{children}</h2>,
@@ -34,6 +36,15 @@ function Message({ role, content }) {
               hr: () => <hr className="my-2 border-gray-200" />,
               blockquote: ({ children }) => (
                 <blockquote className="border-l-2 border-gray-300 pl-2 text-gray-600 italic my-1">{children}</blockquote>
+              ),
+              table: ({ children }) => (
+                <table className="text-xs border-collapse w-full mb-2">{children}</table>
+              ),
+              th: ({ children }) => (
+                <th className="border border-gray-300 px-2 py-1 bg-gray-100 font-semibold text-left">{children}</th>
+              ),
+              td: ({ children }) => (
+                <td className="border border-gray-300 px-2 py-1">{children}</td>
               ),
             }}
           >
