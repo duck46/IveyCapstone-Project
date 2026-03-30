@@ -154,6 +154,7 @@ Apply the full 4-level assessment framework and return your evaluation as JSON."
                     {"role": "system", "content": SYSTEM_PROMPT},
                     {"role": "user", "content": user_prompt},
                 ],
+                extra_body={"transforms": []},
             )
             break
         except Exception as e:

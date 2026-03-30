@@ -88,6 +88,7 @@ def chat(request: ChatRequest) -> ChatResponse:
                 model=model,
                 max_tokens=1024,
                 messages=[{"role": "system", "content": CHATBOT_SYSTEM_PROMPT}] + messages,
+                extra_body={"transforms": []},
             )
             break
         except Exception as e:
