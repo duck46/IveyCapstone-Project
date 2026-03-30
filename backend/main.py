@@ -9,9 +9,6 @@ from fastapi.responses import FileResponse
 
 from routers import evaluate, chat
 
-key = os.environ.get("OPENROUTER_API_KEY", "")
-print(f"[DEBUG] OPENROUTER_API_KEY: length={len(key)}, starts_with={repr(key[:12])}", flush=True)
-
 app = FastAPI(
     title="FSRA Underwriting Rule Assessment API",
     description="AI-assisted evaluation of auto insurance underwriting decline rules",
