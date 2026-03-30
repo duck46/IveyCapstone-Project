@@ -38,8 +38,11 @@ export default function RuleSubmissionForm({ onSubmit, isLoading }) {
           <button
             type="button"
             onClick={() => setShowExamples(!showExamples)}
-            className="text-xs text-fsra-green hover:text-fsra-green-light underline"
+            className="flex items-center gap-1.5 text-xs font-medium bg-fsra-gold text-fsra-green px-3 py-1.5 rounded-full hover:brightness-95 transition-all shadow-sm"
           >
+            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
             {showExamples ? 'Hide examples' : 'Try an example'}
           </button>
         </div>
