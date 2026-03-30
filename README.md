@@ -12,8 +12,14 @@ An AI-assisted regulatory evaluation tool built for the Ivey Capstone project. I
 
 <!-- Add screenshots here. Recommended: -->
 <!-- 1. Rule submission form -->
+<img width="2560" height="1142" alt="image" src="https://github.com/user-attachments/assets/aaeffa57-83b9-4747-85f0-faf7ab2b60cf" />
+
 <!-- 2. Assessment results with level breakdown -->
+<img width="2560" height="4239" alt="image" src="https://github.com/user-attachments/assets/6338b6b2-d17d-4475-914d-19a350d3bdd2" />
+
 <!-- 3. Chatbot panel -->
+<img width="2560" height="1142" alt="image" src="https://github.com/user-attachments/assets/99a34554-e046-43be-ba63-d46108eb5e96" />
+
 <!-- To add: drag images into this section on GitHub, or use: ![Description](path/to/image.png) -->
 
 ---
