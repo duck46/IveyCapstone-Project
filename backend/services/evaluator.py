@@ -149,9 +149,12 @@ Apply the full 4-level assessment framework and return your evaluation as JSON."
 
     raw = response.choices[0].message.content.strip()
 
-    # Strip markdown code fences if present
-    raw = re.sub(r"^```(?:json)?\s*", "", raw)
-    raw = re.sub(r"\s*```$", "", raw)
+    # Extract JSON object - find outermost { ... }
+    start = raw.find("{")
+    end = raw.rfind("}") + 1
+    if start == -1 or end == 0:
+        raise ValueError(f"No JSON object found in model response: {raw[:200]}")
+    raw = raw[start:end]
 
     data = json.loads(raw)
 
