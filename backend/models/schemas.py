@@ -3,10 +3,10 @@ from pydantic import BaseModel, Field
 
 
 class EvaluateRequest(BaseModel):
-    rule_text: str = Field(..., description="The proposed underwriting decline rule text")
-    insurer_name: Optional[str] = Field(None, description="Name of the insurer proposing the rule")
+    rule_text: str = Field(..., min_length=1, max_length=2000, description="The proposed underwriting decline rule text")
+    insurer_name: Optional[str] = Field(None, max_length=200, description="Name of the insurer proposing the rule")
     supporting_rationale: Optional[str] = Field(
-        None, description="The insurer's stated justification for the rule"
+        None, max_length=3000, description="The insurer's stated justification for the rule"
     )
     actuarial_data_provided: bool = Field(
         False, description="Whether the insurer has provided actuarial data to support the rule"
@@ -43,8 +43,8 @@ class ChatMessage(BaseModel):
 
 
 class ChatRequest(BaseModel):
-    message: str
-    history: List[ChatMessage] = Field(default_factory=list)
+    message: str = Field(..., min_length=1, max_length=1000)
+    history: List[ChatMessage] = Field(default_factory=list, max_length=20)
 
 
 class ChatResponse(BaseModel):

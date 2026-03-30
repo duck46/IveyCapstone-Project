@@ -1,9 +1,11 @@
 from fastapi import APIRouter, HTTPException
+import logging
 
 from models.schemas import EvaluateRequest, EvaluateResponse
 from services.evaluator import evaluate_rule
 from data.approved_rules import APPROVED_RULES
 
+logger = logging.getLogger(__name__)
 router = APIRouter()
 
 
@@ -14,7 +16,8 @@ def evaluate(request: EvaluateRequest):
     try:
         return evaluate_rule(request)
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        logger.error("Evaluation error: %s", e)
+        raise HTTPException(status_code=500, detail="Evaluation failed. Please try again.")
 
 
 @router.get("/rules/examples")

@@ -1,8 +1,10 @@
 from fastapi import APIRouter, HTTPException
+import logging
 
 from models.schemas import ChatRequest, ChatResponse
 from services.chatbot import chat
 
+logger = logging.getLogger(__name__)
 router = APIRouter()
 
 
@@ -13,4 +15,5 @@ def chat_endpoint(request: ChatRequest):
     try:
         return chat(request)
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        logger.error("Chat error: %s", e)
+        raise HTTPException(status_code=500, detail="Chat failed. Please try again.")
