@@ -8,6 +8,22 @@ An AI-assisted regulatory evaluation tool built for the Ivey Capstone project. I
 
 ---
 
+## Screenshots
+
+<!-- Add screenshots here. Recommended: -->
+<!-- 1. Rule submission form -->
+<!-- 2. Assessment results with level breakdown -->
+<!-- 3. Chatbot panel -->
+<!-- To add: drag images into this section on GitHub, or use: ![Description](path/to/image.png) -->
+
+---
+
+## Built By
+
+**Simon L** — [Ivey AI Prototyping for Business Innovation](https://www.ivey.uwo.ca/executive-education/online/cohorts/ai-prototyping-for-business-innovation/), Cohort 2026
+
+---
+
 ## Background
 
 Under Ontario's **Take All Comers Rule** (Insurance Act), insurers must offer auto insurance to all consumers — unless they have FSRA-approved underwriting decline rules. This tool streamlines the review process by using AI to pre-screen proposed rules across four regulatory dimensions, flagging potential issues before human analysts make the final call.
