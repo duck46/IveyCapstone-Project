@@ -22,9 +22,60 @@ An AI-assisted regulatory evaluation tool built for the Ivey Capstone project. I
 
 <!-- To add: drag images into this section on GitHub, or use: ![Description](path/to/image.png) -->
 
+## Solution Architecture
+
+```mermaid
+flowchart TD
+    User(["👤 Regulatory Analyst\n(Browser)"])
+
+    subgraph Render ["☁️ Render.com — Single Web Service"]
+        subgraph FE ["Frontend  ·  React 18 + Vite + TailwindCSS"]
+            F1["Rule Submission Form"]
+            F2["Compliance Dashboard"]
+            F3["Assessment Panel"]
+            F4["Regulatory Chatbot"]
+        end
+
+        subgraph BE ["Backend  ·  Python + FastAPI"]
+            R1["POST /api/evaluate"]
+            R2["POST /api/chat"]
+            EV["Evaluator Service\n4-Level FSRA Framework"]
+            CS["Chatbot Service\nRegulatory Knowledge Base"]
+            DL["Data Layer\nApproved Rules · Legislation · Principles"]
+        end
+    end
+
+    subgraph AI ["🤖 OpenRouter API  ·  LLM Fallback Chain"]
+        M1["openai/gpt-oss-20b"]
+        M2["google/gemma-3-27b-it"]
+        M3["meta-llama/llama-3.3-70b"]
+        M4["nvidia/nemotron-120b"]
+    end
+
+    User -->|"HTTPS"| FE
+    F1 -->|"POST /api/evaluate"| R1
+    F4 -->|"POST /api/chat"| R2
+    R1 --> EV
+    R2 --> CS
+    DL --> EV
+    DL --> CS
+    EV -->|"Prompt + Framework"| AI
+    CS -->|"Prompt + Context"| AI
+    AI -->|"Structured JSON"| EV
+    AI -->|"Text Response"| CS
+    EV -->|"4-Level Assessment"| F3
+    CS -->|"Chat Response"| F4
+    F3 --> F2
+
+    style Render fill:#f0f7f0,stroke:#1a4731,stroke-width:2px
+    style AI fill:#fff8e6,stroke:#c9a84c,stroke-width:2px
+    style FE fill:#e8f5e8,stroke:#1a4731
+    style BE fill:#f5f5f5,stroke:#666
+```
+
 ---
 
-## Built By
+
 
 **Simon L** — [Ivey AI Prototyping for Business Innovation](https://www.ivey.uwo.ca/executive-education/online/cohorts/ai-prototyping-for-business-innovation/), Cohort 2026
 
