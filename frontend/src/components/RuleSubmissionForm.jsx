@@ -112,7 +112,10 @@ export default function RuleSubmissionForm({ onSubmit, isLoading }) {
         />
       </div>
 
-      <div className="flex justify-end">
+      <div className="flex items-center justify-between">
+        <p className="text-xs text-gray-400 italic">
+          AI responses may take 15–30 seconds on the free tier.
+        </p>
         <button type="submit" disabled={isLoading || !ruleText.trim()} className="btn-primary flex items-center gap-2">
           {isLoading ? (
             <>

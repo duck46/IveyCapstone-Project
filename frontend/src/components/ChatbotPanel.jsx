@@ -128,7 +128,7 @@ export default function ChatbotPanel({ isOpen, onClose }) {
 
       {/* Disclaimer */}
       <div className="bg-amber-50 border-b border-amber-200 px-3 py-2 text-xs text-amber-700 shrink-0">
-        AI assistant for educational purposes only. Not a substitute for binding regulatory decisions.
+        AI assistant for educational purposes only. Not a substitute for binding regulatory decisions. Responses may take 15–30 seconds on the free tier.
       </div>
 
       {/* Messages */}
