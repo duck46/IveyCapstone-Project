@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 const EXAMPLE_RULES = [
   'Deny insurance to anyone who has driven a red car in the past 5 years',
@@ -16,6 +16,28 @@ export default function RuleSubmissionForm({ onSubmit, isLoading }) {
   const [rationale, setRationale] = useState('')
   const [actuarialData, setActuarialData] = useState(false)
   const [showExamples, setShowExamples] = useState(false)
+  const [progress, setProgress] = useState(0)
+  const intervalRef = useRef(null)
+
+  useEffect(() => {
+    if (isLoading) {
+      setProgress(0)
+      intervalRef.current = setInterval(() => {
+        setProgress((prev) => {
+          if (prev >= 85) return prev
+          const increment = prev < 50 ? 2 : prev < 70 ? 1 : 0.4
+          return Math.min(prev + increment, 85)
+        })
+      }, 300)
+    } else {
+      clearInterval(intervalRef.current)
+      if (progress > 0) {
+        setProgress(100)
+        setTimeout(() => setProgress(0), 600)
+      }
+    }
+    return () => clearInterval(intervalRef.current)
+  }, [isLoading])
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -111,6 +133,21 @@ export default function RuleSubmissionForm({ onSubmit, isLoading }) {
           placeholder="Describe the insurer's stated justification for this rule..."
         />
       </div>
+
+      {progress > 0 && (
+        <div className="w-full">
+          <div className="flex justify-between text-xs text-gray-500 mb-1">
+            <span>Analysing rule across 4 levels...</span>
+            <span className="font-medium">{Math.round(progress)}%</span>
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-2">
+            <div
+              className="bg-fsra-green h-2 rounded-full transition-all duration-300"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+        </div>
+      )}
 
       <div className="flex items-center justify-between">
         <p className="text-xs text-gray-400 italic">
