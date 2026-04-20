@@ -18,8 +18,8 @@ class LevelResult(BaseModel):
     name: str
     status: Literal["PASS", "FLAG", "FAIL"]
     findings: str
-    relevant_references: List[str]
-    rejection_reasons_identified: List[str]
+    relevant_references: List[str] = Field(default_factory=list)
+    rejection_reasons_identified: List[str] = Field(default_factory=list)
 
 
 class EvaluateResponse(BaseModel):
