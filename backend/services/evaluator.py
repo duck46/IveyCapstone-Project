@@ -149,7 +149,7 @@ Apply the full 4-level assessment framework and return your evaluation as JSON."
         try:
             response = client.chat.completions.create(
                 model=model,
-                max_tokens=2500,
+                max_tokens=4000,
                 messages=[
                     {"role": "system", "content": SYSTEM_PROMPT},
                     {"role": "user", "content": user_prompt},
