@@ -130,8 +130,8 @@ Under Ontario's **Take All Comers Rule** (Insurance Act), insurers must offer au
 ### 1. Clone the repo and switch to the development branch
 
 ```bash
-git clone https://github.com/duck46/IveyCapstone-Project.git
-cd IveyCapstone-Project
+duck46/Ivey-Business-School-Capstone-Project.git
+cd Ivey-Business-School-Capstone-Project
 git checkout claude/ivey-capstone-setup-q7lOo
 ```
 
