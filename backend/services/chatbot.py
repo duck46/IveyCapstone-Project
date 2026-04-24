@@ -12,6 +12,7 @@ client = OpenAI(
 )
 
 MODELS = [
+    "openai/gpt-4o-mini",
     "openai/gpt-oss-20b:free",
     "google/gemma-3-27b-it:free",
     "meta-llama/llama-3.3-70b-instruct:free",
