@@ -58,7 +58,7 @@ If the rule already exists in market, reference the precedent. If not compliant 
 
 ### Level 2 — Principles & Fair Consumer Outcomes (STRETCH)
 Evaluate against FSRA's 6 principles:
-{_PRINCIPLES_TEXT}
+{{_PRINCIPLES_TEXT}}
 
 ### Level 3 — Subjectivity, Arbitrariness & Risk Relationship (STRETCH)
 Evaluate:
@@ -71,13 +71,13 @@ Evaluate:
 As a government agency protecting consumers: Is there anything about this rule that conflicts with public policy priorities, FSRA's consumer protection mandate, or the spirit of fair auto insurance access?
 
 ## Known Approved Underwriting Rules (Precedent Reference)
-{_APPROVED_RULES_TEXT}
+{{_APPROVED_RULES_TEXT}}
 
 ## Relevant Ontario Legislation
-{_LEGISLATION_TEXT}
+{{_LEGISLATION_TEXT}}
 
 ## Rejection Reasons to Identify
-{_REJECTION_REASONS_TEXT}
+{{_REJECTION_REASONS_TEXT}}
 
 ## Scoring
 - Overall score is 0–100 (higher = more likely to be approved)
@@ -88,101 +88,43 @@ As a government agency protecting consumers: Is there anything about this rule t
 
 ## Output Format
 You MUST respond with ONLY valid JSON in this exact structure (no markdown, no extra text):
-{{
+{{{{
   "overall_recommendation": "APPROVE" | "FLAG_FOR_REVIEW" | "DECLINE",
   "overall_score": <number 0-100>,
   "summary": "<2-3 sentence plain language summary of the overall assessment>",
   "levels": [
-    {{
+    {{{{
       "level": 1,
       "name": "Basic Compliance",
       "status": "PASS" | "FLAG" | "FAIL",
       "findings": "<detailed findings for this level>",
       "relevant_references": ["<legislation/guidance name>", ...],
       "rejection_reasons_identified": ["<reason name>", ...]
-    }},
-    {{
+    }}}},
+    {{{{
       "level": 2,
       "name": "Principles & Fair Consumer Outcomes",
       "status": "PASS" | "FLAG" | "FAIL",
       "findings": "<detailed findings>",
       "relevant_references": ["<principle name>", ...],
       "rejection_reasons_identified": [...]
-    }},
-    {{
+    }}}},
+    {{{{
       "level": 3,
       "name": "Subjectivity, Arbitrariness & Risk Relationship",
       "status": "PASS" | "FLAG" | "FAIL",
       "findings": "<detailed findings>",
       "relevant_references": [],
       "rejection_reasons_identified": [...]
-    }},
-    {{
+    }}}},
+    {{{{
       "level": 4,
       "name": "Public Policy Filter",
       "status": "PASS" | "FLAG" | "FAIL",
       "findings": "<detailed findings>",
       "relevant_references": [],
       "rejection_reasons_identified": [...]
-    }}
+    }}}}
   ]
-}}
+}}}}
 """
-
-
-def evaluate_rule(request: EvaluateRequest) -> EvaluateResponse:
-    user_prompt = f"""Please evaluate the following proposed underwriting decline rule:
-
-**Proposed Rule:** {request.rule_text}
-
-**Insurer Name:** {request.insurer_name or "Not specified"}
-
-**Insurer's Supporting Rationale:** {request.supporting_rationale or "None provided"}
-
-**Actuarial Data Provided:** {"Yes" if request.actuarial_data_provided else "No"}
-
-Apply the full 4-level assessment framework and return your evaluation as JSON."""
-
-    last_error = None
-    response = None
-    for model in MODELS:
-        try:
-            response = client.chat.completions.create(
-                model=model,
-                max_tokens=2500,
-                messages=[
-                    {"role": "system", "content": SYSTEM_PROMPT},
-                    {"role": "user", "content": user_prompt},
-                ],
-                extra_body={"transforms": []},
-            )
-            break
-        except Exception as e:
-            if "429" in str(e) or "rate" in str(e).lower():
-                last_error = e
-                continue
-            raise
-    if response is None:
-        raise last_error
-
-    raw = response.choices[0].message.content.strip()
-
-    # Extract JSON object - find outermost { ... }
-    start = raw.find("{")
-    end = raw.rfind("}") + 1
-    if start == -1 or end == 0:
-        raise ValueError(f"No JSON object found in model response: {raw[:200]}")
-    raw = raw[start:end]
-
-    data = json.loads(raw)
-
-    levels = [LevelResult(**lvl) for lvl in data["levels"]]
-
-    return EvaluateResponse(
-        rule_text=request.rule_text,
-        insurer_name=request.insurer_name,
-        overall_recommendation=data["overall_recommendation"],
-        overall_score=float(data["overall_score"]),
-        summary=data["summary"],
-        levels=levels,
-    )
