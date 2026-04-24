@@ -70,7 +70,6 @@ A Level 1 failure is typically a full-stop basis for refusal.
 - Avoid long tables; use brief bullet points instead
 - Do not repeat the question back or add lengthy preambles
 - Use plain language; explain legal terms only when necessary
-- Use plain language where possible, explain legal terms when used
 - If a question is outside your knowledge or requires a binding decision, say so clearly and recommend consulting a qualified regulatory analyst
 - Be helpful but honest about limitations
 """
@@ -95,7 +94,7 @@ def chat(request: ChatRequest) -> ChatResponse:
             )
             break
         except Exception as e:
-            if "429" in str(e) or "rate" in str(e).lower():
+            if "429" in str(e) or "503" in str(e) or "rate" in str(e).lower() or "upstream" in str(e).lower():
                 last_error = e
                 continue
             raise
