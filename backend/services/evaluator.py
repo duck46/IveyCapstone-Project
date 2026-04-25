@@ -14,6 +14,7 @@ client = OpenAI(
 )
 
 MODELS = [
+    "openai/gpt-4o-mini",
     "openai/gpt-oss-20b:free",
     "google/gemma-3-27b-it:free",
     "meta-llama/llama-3.3-70b-instruct:free",
@@ -158,7 +159,7 @@ Apply the full 4-level assessment framework and return your evaluation as JSON."
             )
             break
         except Exception as e:
-            if "429" in str(e) or "rate" in str(e).lower():
+            if "429" in str(e) or "503" in str(e) or "rate" in str(e).lower() or "upstream" in str(e).lower():
                 last_error = e
                 continue
             raise
