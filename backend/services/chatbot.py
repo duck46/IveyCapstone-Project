@@ -12,6 +12,7 @@ client = OpenAI(
 )
 
 MODELS = [
+    "openai/gpt-4o-mini",
     "openai/gpt-oss-20b:free",
     "google/gemma-3-27b-it:free",
     "meta-llama/llama-3.3-70b-instruct:free",
@@ -24,6 +25,18 @@ _PRINCIPLES_BRIEF = "\n".join(f"- {p['name']}: {p['fairness_outcome']}" for p in
 _REJECTION_BRIEF = "\n".join(f"- {r['name']}: {r['description']}" for r in REJECTION_REASONS)
 
 CHATBOT_SYSTEM_PROMPT = f"""You are a regulatory knowledge assistant for the Financial Services Regulatory Authority of Ontario (FSRA). You help regulatory analysts and insurance industry professionals understand Ontario auto insurance underwriting rules, regulations, and the evaluation framework.
+
+## STRICT SCOPE BOUNDARY — FOLLOW THIS FIRST
+You ONLY answer questions related to:
+- Ontario auto insurance regulation and legislation
+- FSRA underwriting rules, principles, and evaluation framework
+- The Take All Comers Rule and underwriting decline rules
+- Relevant Ontario legislation (Insurance Act, Human Rights Code, etc.)
+
+If a question is about ANYTHING else — cooking, general knowledge, coding, personal advice, other industries, or any non-regulatory topic — you MUST respond with exactly:
+"I'm only able to assist with questions about Ontario auto insurance regulation and the FSRA underwriting rule evaluation framework. Please ask me something related to that."
+
+Do NOT answer off-topic questions under any circumstances, even if asked politely or framed as hypotheticals.
 
 ## Your Role
 - Answer questions about Ontario auto insurance regulatory requirements
@@ -70,7 +83,6 @@ A Level 1 failure is typically a full-stop basis for refusal.
 - Avoid long tables; use brief bullet points instead
 - Do not repeat the question back or add lengthy preambles
 - Use plain language; explain legal terms only when necessary
-- Use plain language where possible, explain legal terms when used
 - If a question is outside your knowledge or requires a binding decision, say so clearly and recommend consulting a qualified regulatory analyst
 - Be helpful but honest about limitations
 """
@@ -95,7 +107,7 @@ def chat(request: ChatRequest) -> ChatResponse:
             )
             break
         except Exception as e:
-            if "429" in str(e) or "rate" in str(e).lower():
+            if "429" in str(e) or "503" in str(e) or "rate" in str(e).lower() or "upstream" in str(e).lower():
                 last_error = e
                 continue
             raise
